@@ -1,5 +1,4 @@
-# NEOM-Urban-Agent-Network
-AI-powered Python multi-agent system for smart city management, integrating Groq LLM, Random Forest, LangSmith, and Streamlit to coordinate energy, transportation, and waste services.
+
 # NEOM Urban Agent Network — Python + Groq LLM + Predictive AI + LangSmith
 
 A five-agent smart-city *simulation* for energy/EV charging, traffic, and waste collection.
