@@ -1,5 +1,5 @@
 
-# NEOM Urban Agent Network — Python + Groq LLM + Predictive AI + LangSmith
+# NEOM Urban Agent Network 
 
 A five-agent smart-city *simulation* for energy/EV charging, traffic, and waste collection.
 The agents are **Energy**, **Transportation**, **Waste**, **Coordinator**, and **Peak Prediction**.
