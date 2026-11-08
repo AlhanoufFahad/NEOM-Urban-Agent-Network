@@ -63,11 +63,6 @@ requirements.txt           Dependencies
 .gitignore                 Git secret/file exclusions
 ```
 
-## Group submission
-
-Upload the source files (not just a ZIP) to GitHub. Add all group members and the instructors **Dr. Eman** and **T. Manairh** as collaborators (using their actual GitHub usernames). Test installation from a fresh clone. Keep API keys in a local `.env` only.  
-
-
 ## Project Team
 - Norah Mansour
 - Raghad Almarhom
