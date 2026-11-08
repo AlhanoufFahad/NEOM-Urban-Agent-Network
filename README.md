@@ -18,7 +18,7 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env`, then set **your real** `GROQ_API_KEY` from https://console.groq.com/keys. LangSmith keys are optional, obtained separately from https://smith.langchain.com. **Never upload `.env` to GitHub.**
+Copy `.env.example` to `.env`, then set **your real** `GROQ_API_KEY` from https://console.groq.com/keys. LangSmith keys are optional, obtained separately from https://smith.langchain.com. 
 
 ## Run
 
