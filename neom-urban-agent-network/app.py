@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 from neom.model import CitySimulation, Config, PERFORMATIVES
-from neom.llm import configured as llm_configured
+from neom.llm import configured as llm_configured, explain_error, interpret_situation, SITUATION_LIMITS
 from neom.prediction import trained_model
 
 st.set_page_config(page_title="NEOM Urban Agent Network", page_icon="🏙️", layout="wide", initial_sidebar_state="expanded")
@@ -89,6 +89,33 @@ with st.sidebar:
         reset_sim()
         st.rerun()
     st.progress(min(sim.step_number / max(1, cfg.max_steps), 1.0), text=f"Progress: {sim.step_number} of {cfg.max_steps} steps")
+
+    with st.expander("💬 Describe the situation", expanded=True):
+        st.caption("Write the situation in your own words (Arabic or English). The AI turns it into settings you can review.")
+        situation_text = st.text_area("Situation", key="situation_text", height=90, label_visibility="collapsed",
+                                      placeholder="Example: rush hour, many EVs arriving and bins fill fast")
+        if st.button("🔍 Understand", use_container_width=True, disabled=not situation_text.strip()):
+            try:
+                st.session_state.parsed_situation = interpret_situation(situation_text, cfg.llm_model)
+                st.session_state.parsed_error = None
+            except Exception as error:
+                st.session_state.parsed_situation = None
+                st.session_state.parsed_error = explain_error(error, cfg.llm_model)
+        parsed = st.session_state.get("parsed_situation")
+        if st.session_state.get("parsed_error"):
+            st.warning(f"Could not understand the text. Use the sliders instead. ({st.session_state.parsed_error})", icon="⚠️")
+        elif parsed is not None and not parsed:
+            st.info("No settings found in the text. Try mentioning EV traffic or bin filling.", icon="ℹ️")
+        elif parsed:
+            st.markdown("**How I understood it**")
+            st.table(pd.DataFrame([{"Setting": SITUATION_LIMITS[k][2], "Current": getattr(cfg, k), "Understood": v}
+                                   for k, v in parsed.items()]).set_index("Setting"))
+            if st.button("✅ Apply", type="primary", use_container_width=True):
+                for k, v in parsed.items():
+                    setattr(cfg, k, v)
+                st.session_state.parsed_situation = None
+                st.rerun()
+            st.caption("After applying, press Reset to restart the scenario with the new settings.")
 
     with st.expander("⚙️ City parameters", expanded=False):
         cfg.peak_threshold = st.slider("Grid threshold (%)", 40, 100, cfg.peak_threshold)
